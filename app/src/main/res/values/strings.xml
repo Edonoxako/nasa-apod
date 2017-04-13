@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">RxApplication</string>
     <string name="apod_content_description">Astronomy Picture of the Day</string>
+    <string name="calendar_title">Choose day for a picture</string>
 </resources>

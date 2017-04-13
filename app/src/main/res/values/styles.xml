@@ -4,10 +4,19 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Calendar">
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowReturnTransition">@android:transition/fade</item>
+    </style>
+
+    <style name="AppTheme.Details">
+        <item name="android:windowReenterTransition">@transition/slide_with_fade</item>
+        <item name="android:windowEnterTransition">@transition/slide_with_fade</item>
     </style>
 
 </resources>

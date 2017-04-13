@@ -33,7 +33,11 @@ public class ApodPresenter {
 
     public void startLoadingApod() {
         Calendar currentDate = Calendar.getInstance();
-        mDisposable = mInteractor.getApodByDate(currentDate)
+        startLoadingApod(currentDate);
+    }
+
+    public void startLoadingApod(Calendar date) {
+        mDisposable = mInteractor.getApodByDate(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

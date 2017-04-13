@@ -37,47 +37,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/view_nested_scroll"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="24dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Cassini's Grand Finale Tour at Saturn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_title"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:textSize="30sp"
-                android:textColor="@android:color/black"
-                android:fontFamily="serif" />
-
-            <TextView
-                android:id="@+id/text_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:textAlignment="viewStart"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:text="Cassini is being prepared to dive into Saturn. The robotic spacecraft that has been orbiting and exploring Saturn for over a decade will end its mission in September with a spectacular atmospheric plunge.  Pictured here is a diagram of Cassini's remaining orbits, each taking about one week.  Cassini is scheduled to complete a few months of orbits that will take it just outside Saturn's outermost ring F.  Then, in April, Titan will give Cassini a gravitational pull into Proximal orbits, the last of which, on September 15, will impact Saturn and cause the spacecraft to implode and melt.  Cassini's Grand Finale orbits are designed to record data and first-ever views from inside the rings -- between the rings and planet -- as well as some small moons interspersed in the rings. Cassini's demise is designed to protect any life that may occur around Saturn or its moons from contamination by Cassini itself.   Free Download: APOD 2017 Calendar: NASA Images" />
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_show_calendar"
         android:layout_width="wrap_content"
@@ -89,6 +48,61 @@
         app:fabSize="normal"
         app:srcCompat="@drawable/calendar"
         app:layout_anchor="@id/bar_app"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+        android:transitionName="calendarButton"
+        />
+
+    <View
+        android:id="@+id/view_reveal_pane"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:visibility="gone"
+        android:fitsSystemWindows="true"
+        android:elevation="8dp"
+        />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/view_nested_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="serif"
+                android:text="Cassini's Grand Finale Tour at Saturn"
+                android:textColor="@android:color/black"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:lineSpacingMultiplier="1.2"
+                android:singleLine="false"
+                android:text="Cassini is being prepared to dive into Saturn. The robotic spacecraft that has been orbiting and exploring Saturn for over a decade will end its mission in September with a spectacular atmospheric plunge.  Pictured here is a diagram of Cassini's remaining orbits, each taking about one week.  Cassini is scheduled to complete a few months of orbits that will take it just outside Saturn's outermost ring F.  Then, in April, Titan will give Cassini a gravitational pull into Proximal orbits, the last of which, on September 15, will impact Saturn and cause the spacecraft to implode and melt.  Cassini's Grand Finale orbits are designed to record data and first-ever views from inside the rings -- between the rings and planet -- as well as some small moons interspersed in the rings. Cassini's demise is designed to protect any life that may occur around Saturn or its moons from contamination by Cassini itself.   Free Download: APOD 2017 Calendar: NASA Images"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

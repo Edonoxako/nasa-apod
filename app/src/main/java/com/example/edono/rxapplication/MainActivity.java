@@ -1,18 +1,28 @@
 package com.example.edono.rxapplication;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.transition.TransitionManager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +35,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,11 +44,13 @@ public class MainActivity extends AppCompatActivity implements ApodView {
 
     private static final String TAG = "MainActivity";
 
+    @BindView(R.id.activity_main) CoordinatorLayout root;
     @BindView(R.id.image_picture) ImageView imagePicture;
     @BindView(R.id.text_title) TextView textTitle;
     @BindView(R.id.text_description) TextView textDescription;
     @BindView(R.id.bar_collapsing) CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.button_show_calendar) FloatingActionButton calendarButton;
+    @BindView(R.id.view_reveal_pane) View revealPane;
 
     private ApodPresenter mPresenter;
 
@@ -62,6 +76,97 @@ public class MainActivity extends AppCompatActivity implements ApodView {
 
         mPresenter = ApodPresenterFactory.newPresenter(this, this);
         mPresenter.startLoadingApod();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CalendarActivity.REQUEST_CODE && data != null) {
+            Calendar date = CalendarActivity.extractResult(data);
+            mPresenter.startLoadingApod(date);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        revealPane.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.release();
+    }
+
+    @Override
+    public void showApod(ApodData apodData, boolean useStubImage) {
+        Log.d(TAG, "showApod: " + apodData);
+        textTitle.setText(apodData.getTitle());
+        textDescription.setText(apodData.getExplanation());
+
+        RequestCreator requestCreator;
+        if (useStubImage) {
+            requestCreator = mPicasso.load(R.drawable.apod_stub_image);
+        } else {
+            requestCreator = mPicasso.load(apodData.getUrl().toString());
+        }
+
+        requestCreator.into(mTarget);
+    }
+
+    @Override
+    public void showCalendar() {
+        animateReveal();
+        new Handler()
+                .postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                goToCalendar();
+            }
+        }, 200);
+    }
+
+    @Override
+    public void showTextMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void animateReveal() {
+        revealPane.setVisibility(View.VISIBLE);
+
+        int cx = root.getWidth();
+        int cy = root.getHeight();
+
+        int startX = (int) (calendarButton.getWidth() / 2 + calendarButton.getX());
+        int startY = (int) (calendarButton.getWidth() / 2 + calendarButton.getY());
+
+        float finalRadius = Math.max(cx, cy) * 1.2f;
+
+        Animator reveal = ViewAnimationUtils
+                .createCircularReveal(revealPane, startX, startY, calendarButton.getWidth(), finalRadius);
+
+        reveal.setDuration(350);
+        reveal.start();
+    }
+
+    private void goToCalendar() {
+        Intent intent = new Intent(this, CalendarActivity.class);
+        ActivityOptions activityOptions = ActivityOptions
+                .makeSceneTransitionAnimation(this);
+
+        startActivityForResult(intent, CalendarActivity.REQUEST_CODE, activityOptions.toBundle());
+    }
+
+    private void setStatusBarScrimFromImage(Bitmap bitmap) {
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                int darkMutedColor =
+                        palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark));
+                collapsingToolbar.setStatusBarScrim(new ColorDrawable(darkMutedColor));
+            }
+        });
     }
 
     private void initPicassoTarget() {
@@ -93,50 +198,5 @@ public class MainActivity extends AppCompatActivity implements ApodView {
                     }
                 })
                 .build();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.release();
-    }
-
-    @Override
-    public void showApod(ApodData apodData, boolean useStubImage) {
-        Log.d(TAG, "showApod: " + apodData);
-        textTitle.setText(apodData.getTitle());
-        textDescription.setText(apodData.getExplanation());
-
-        RequestCreator requestCreator;
-        if (useStubImage) {
-            requestCreator = mPicasso.load(R.drawable.apod_stub_image);
-        } else {
-            requestCreator = mPicasso.load(apodData.getUrl().toString());
-        }
-
-        requestCreator.into(mTarget);
-    }
-
-    @Override
-    public void showCalendar() {
-
-        CalendarDialog dialog = new CalendarDialog();
-        dialog.show(getSupportFragmentManager(), "calendarDialog");
-    }
-
-    private void setStatusBarScrimFromImage(Bitmap bitmap) {
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-            @Override
-            public void onGenerated(Palette palette) {
-                int darkMutedColor =
-                        palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark));
-                collapsingToolbar.setStatusBarScrim(new ColorDrawable(darkMutedColor));
-            }
-        });
-    }
-
-    @Override
-    public void showTextMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

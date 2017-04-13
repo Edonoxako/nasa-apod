@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RxApplication.iml" filepath="$PROJECT_DIR$/RxApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nasa-apod.iml" filepath="$PROJECT_DIR$/nasa-apod.iml" />
     </modules>
   </component>
 </project>

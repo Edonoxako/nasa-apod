@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:transitionName="bar"
         android:id="@+id/bar_app"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -32,6 +33,7 @@
                 android:contentDescription="@string/apod_content_description"
                 app:srcCompat="@mipmap/ic_launcher"
                 app:layout_collapseMode="parallax"
+                android:transitionName="apodPicture"
                 />
 
         </android.support.design.widget.CollapsingToolbarLayout>

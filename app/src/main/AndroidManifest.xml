@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.edono.rxapplication">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -10,17 +10,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.Details">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.Details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".CalendarActivity" android:theme="@style/AppTheme.Calendar"/>
-
+        <activity
+            android:name=".CalendarActivity"
+            android:theme="@style/AppTheme.Calendar" />
+        <activity
+            android:name=".FullscreenPictureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_picture"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

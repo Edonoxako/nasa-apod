@@ -13,7 +13,7 @@ import com.example.edono.rxapplication.util.Constants;
 
 public class ApodPresenterFactory {
 
-    public static ApodPresenter newPresenter(Context context, ApodView view) {
+    public static ApodDetailsPresenter newDetailsPresenter(Context context, ApodDetailsView view) {
         ApodApiFactory apiFactory = new ApodApiFactory(Constants.BASE_URL);
         ApodApi api = apiFactory.getApi();
 
@@ -24,7 +24,11 @@ public class ApodPresenterFactory {
 
         RestCacheApodInteractor interactor = new RestCacheApodInteractor(api, repository);
 
-        return new ApodPresenter(view, interactor);
+        return new ApodDetailsPresenter(view, interactor);
+    }
+
+    public static ApodFullscreenPresenter newFullscreenPresenter(ApodFullscreenView view) {
+        return new ApodFullscreenPresenter(view);
     }
 
 }

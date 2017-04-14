@@ -16,17 +16,18 @@ import io.reactivex.schedulers.Schedulers;
  * Created by edono on 14.03.2017.
  */
 
-public class ApodPresenter {
+public class ApodDetailsPresenter {
 
-    private static final String TAG = "ApodPresenter";
+    private static final String TAG = "ApodDetailsPresenter";
     public static final String MESSAGE_ERROR = "Error during apod loading";
 
-    private ApodView mView;
+    private ApodDetailsView mView;
     private ApodInteractor mInteractor;
 
     private Disposable mDisposable;
+    private ApodData mCurrentApod;
 
-    public ApodPresenter(ApodView view, ApodInteractor interactor) {
+    public ApodDetailsPresenter(ApodDetailsView view, ApodInteractor interactor) {
         this.mView = view;
         this.mInteractor = interactor;
     }
@@ -44,6 +45,7 @@ public class ApodPresenter {
                         new Consumer<ApodData>() {
                             @Override
                             public void accept(ApodData apodData) throws Exception {
+                                mCurrentApod = apodData;
                                 mView.showApod(apodData,
                                         apodData.getMediaType() != ApodMediaType.IMAGE);
                             }
@@ -51,6 +53,7 @@ public class ApodPresenter {
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
+                                mCurrentApod = null;
                                 Log.e(TAG, MESSAGE_ERROR, throwable);
                                 mView.showTextMessage(MESSAGE_ERROR);
                             }
@@ -67,4 +70,11 @@ public class ApodPresenter {
         }
     }
 
+    public void toFullscreenImage() {
+        if (mCurrentApod != null) {
+            mView.showPictureFullscreen(mCurrentApod.getHdUrl());
+        } else {
+            mView.showPictureFullscreen(null);
+        }
+    }
 }

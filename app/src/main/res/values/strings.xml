@@ -2,4 +2,8 @@
     <string name="app_name">RxApplication</string>
     <string name="apod_content_description">Astronomy Picture of the Day</string>
     <string name="calendar_title">Choose day for a picture</string>
+
+    <string name="title_activity_fullscreen_picture">FullscreenPictureActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.example.edono.rxapplication;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,34 +12,32 @@ import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.transition.TransitionManager;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.TransitionSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.edono.rxapplication.domain.ApodPresenter;
+import com.example.edono.rxapplication.domain.ApodDetailsPresenter;
 import com.example.edono.rxapplication.domain.ApodPresenterFactory;
-import com.example.edono.rxapplication.domain.ApodView;
+import com.example.edono.rxapplication.domain.ApodDetailsView;
 import com.example.edono.rxapplication.domain.model.ApodData;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
+import java.net.URL;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements ApodView {
+public class MainActivity extends AppCompatActivity implements ApodDetailsView {
 
     private static final String TAG = "MainActivity";
 
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ApodView {
     @BindView(R.id.button_show_calendar) FloatingActionButton calendarButton;
     @BindView(R.id.view_reveal_pane) View revealPane;
 
-    private ApodPresenter mPresenter;
+    private ApodDetailsPresenter mPresenter;
 
     private Target mTarget;
     private Picasso mPicasso;
@@ -74,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ApodView {
             }
         });
 
-        mPresenter = ApodPresenterFactory.newPresenter(this, this);
+        mPresenter = ApodPresenterFactory.newDetailsPresenter(this, this);
         mPresenter.startLoadingApod();
     }
 
@@ -130,6 +127,22 @@ public class MainActivity extends AppCompatActivity implements ApodView {
     @Override
     public void showTextMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.image_picture)
+    public void onImageClick() {
+        mPresenter.toFullscreenImage();
+    }
+
+    @Override
+    public void showPictureFullscreen(URL pictureUrl) {
+        Intent startIntent = FullscreenPictureActivity.getStartIntent(this, pictureUrl);
+
+        Bundle apodPictureOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, imagePicture, imagePicture.getTransitionName())
+                .toBundle();
+
+        startActivity(startIntent, apodPictureOptions);
     }
 
     private void animateReveal() {
